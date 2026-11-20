@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+  <g>
+    <circle cx="50" cy="50" r="50" fill="#1A1B1E"></circle>
+    <!-- The tint band. Drawn as the circular segment above the chord from
+         (0,58) to (100,38) rather than as that rectangle clipped to the disc:
+         Qt's SVG renderer is Tiny 1.2 and ignores <clipPath> entirely, so a
+         clipped rectangle would paint a pale square over the transparent
+         corners and the icon would stop being round. The arc is a hair inside
+         the disc (r=49.4): sharing the edge exactly leaves both shapes
+         antialiased against each other and the tint bleeds a pale rim past
+         the silhouette. Endpoints are where the chord meets that radius. -->
+    <path d="M1.2130,57.7574 A49.4,49.4 0 1,1 98.0177,38.3965 Z"
+          fill="#048F92" opacity="0.18"></path>
+    <polyline points="18,80 38,58 58,66 82,34" fill="none" stroke="#8CC63E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    <circle cx="50" cy="22" r="7" fill="#FFFFFF"></circle>
+    <line x1="50" y1="29" x2="26" y2="70" stroke="#535559" stroke-width="1.4"></line>
+    <line x1="50" y1="29" x2="50" y2="72" stroke="#535559" stroke-width="1.4"></line>
+    <line x1="50" y1="29" x2="74" y2="70" stroke="#535559" stroke-width="1.4"></line>
+    <circle cx="26" cy="74" r="5" fill="#048F92"></circle>
+    <circle cx="50" cy="76" r="5" fill="#048F92"></circle>
+    <circle cx="74" cy="74" r="5" fill="#048F92"></circle>
+  </g>
+</svg>

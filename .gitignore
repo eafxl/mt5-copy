@@ -1,0 +1,24 @@
+.claude
+.idea/
+.DS_Store
+dumps
+logs
+traces
+**/__pycache__/
+*.pyc
+cache
+
+# Writability probes (see paths._is_writable) — scratch, never source.
+*.write_test
+.write_test
+
+# Nuitka build output (dist/ holds MetaCopier.exe; the rest are scratch trees)
+venv-build/
+dist/
+*.build/
+*.dist/
+*.onefile-build/
+
+# Trace files that landed outside traces/ — an older run wrote them to the
+# working directory. Output, never source.
+*_traces.jsonl

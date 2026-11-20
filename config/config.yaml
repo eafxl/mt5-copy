@@ -1,0 +1,55 @@
+# MetaCopier Configuration
+# ================================
+# Keys below match the current schema (src/config.py). Unknown/legacy keys are
+# ignored on load, but keep this file aligned to avoid confusion.
+#
+# Parallel mode (default): each slave runs in its own MT5 install + process, so
+# opens/closes and warmup happen concurrently. Give every slave its own
+# terminal_path. Without one, a slave falls back to slave_terminal.terminal_path.
+
+master:
+  # Master MT5 terminal — where you trade manually (untouched by the copier).
+  terminal_path: "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+  poll_interval_ms: 25          # Poll fallback cadence (EA push is primary)
+
+slave_terminal:
+  # Default slave terminal (used only if a slave has no terminal_path of its own).
+  terminal_path: "C:\\Program Files\\MetaTrader 5 Slave\\terminal64.exe"
+
+slaves:
+  - name: "bybitreal"
+    login: 2089148
+    password: "pass"
+    server: "Bybit-Live"
+    multiplier: 1.0             # Volume multiplier (multiplier risk_mode)
+    adjust_by_leverage: true    # Scale volume by master/slave leverage ratio
+    enabled: true
+    terminal_path: C:\Program Files\MetaTrader 5 Slave\terminal64.exe
+    risk_mode: multiplier       # multiplier | fixed_volume | fixed_usd | pct_deposit
+    # Risk guard for THIS account: block a trade whose loss-if-SL-hit exceeds
+    # this % of its own balance (0 = off). Must be above what the broker's
+    # minimum lot risks, or every trade on this slave is blocked.
+    max_risk_pct_per_trade: 0.0
+    symbol_mapping:             # Per-slave symbol name overrides (master -> slave)
+
+settings:
+  # --- copy behavior ---
+  sync_existing_on_start: true  # Copy already-open master positions on start
+  max_entry_deviation_ratio: 0.2  # Skip if price moved > this fraction of SL dist (0 = off)
+  max_slippage_points: 0        # Max order slippage in points (0 = no limit)
+  # max_risk_pct_per_trade moved to each slave (see slaves: above). A value
+  # left here is migrated onto the slaves on load, then dropped.
+  retry_attempts: 5
+  retry_delay_ms: 2000
+
+  # --- transport / concurrency ---
+  ea_push_enabled: true         # Master EA pushes events over localhost (fast copy)
+  ea_push_port: 47800
+  parallel_dispatch: true       # Dispatch slave ops concurrently (off = ARM64/Parallels safe)
+  parallel_warmup: true         # Warm up all terminals concurrently (off = serial cold-start)
+
+  # --- ui / misc ---
+  toast_position: Bottom-Right  # Off | Bottom-Left | Bottom-Right | Top-Left | Top-Right
+  maximize_master_on_start: true
+  debug_skip_execution: false   # Simulate: compute + log copies but never send orders
+  log_level: DEBUG              # DEBUG | INFO | WARNING | ERROR
